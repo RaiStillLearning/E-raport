@@ -1,19 +1,18 @@
-import React from "react";
 import { Navbar, Container } from "react-bootstrap";
 
 const NavbarComponent = () => {
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" fixed="top">
       <Container>
         <Navbar.Brand>
           <img
-            src="/src/assets/logo-ghamcak.jpg"
+            src="/src/assets/logo-ghamcak.png"
             alt="Logo"
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
+            width="160"
+            height="200"
+            className="navbar-logo"
           />{" "}
-          React Bootstrap Navbar
+          E <span>Rapor</span>
         </Navbar.Brand>
       </Container>
     </Navbar>

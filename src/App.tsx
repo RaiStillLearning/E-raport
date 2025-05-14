@@ -2,11 +2,12 @@ import React from "react";
 import "./App.css";
 
 //import components here
+import NavbarComponent from "../components/navbar";
 
 function App() {
   return (
     <>
-      <h1>Hello</h1>
+      <NavbarComponent />
     </>
   );
 }
