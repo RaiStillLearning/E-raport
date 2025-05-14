@@ -12,7 +12,7 @@ const NavbarComponent = () => {
             height="200"
             className="navbar-logo"
           />{" "}
-          E <span>Rapor</span>
+          <span className="text-danger">E</span> -Rapor
         </Navbar.Brand>
       </Container>
     </Navbar>
