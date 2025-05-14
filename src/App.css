@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+/* navbar section */
 @media (max-width: 768px) {
   .navbar-logo {
     width: 120px;
@@ -11,13 +12,30 @@
   }
 }
 
+.navbar-color {
+  background-color: #fff;
+}
+
 .navbar {
   padding-left: 0;
   padding-right: 0;
   height: 70px;
+  width: 100%; /* Membuat navbar selebar viewport */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999; /* Pastikan navbar di atas konten lainnya */
 }
 
 .navbar-logo {
   width: auto;
   height: 200px;
+}
+
+.navbar-transition {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%);
 }
