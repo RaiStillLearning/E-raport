@@ -26,9 +26,7 @@ const NavbarComponent = () => {
     <Navbar
       expand="lg"
       fixed="top"
-      className={`bg-light navbar-transition ${
-        showNavbar ? "" : "navbar-hidden"
-      }`}
+      className={` navbar-transition ${showNavbar ? "" : "navbar-hidden"}`}
     >
       <Container fluid>
         <Navbar.Brand>
