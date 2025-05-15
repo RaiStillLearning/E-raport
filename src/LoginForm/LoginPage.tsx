@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 // Tipe data untuk form state
 interface LoginFormState {
+  name: string;
   email: string;
   password: string;
   tahunPelajaran: string;
@@ -14,6 +15,7 @@ interface LoginFormState {
 
 const LoginPage: React.FC = () => {
   const [formState, setFormState] = useState<LoginFormState>({
+    name: "",
     email: "",
     password: "",
     tahunPelajaran: "2024/2025",
@@ -41,6 +43,7 @@ const LoginPage: React.FC = () => {
     // Logika validasi login sederhana
     setTimeout(() => {
       if (
+        formState.name === "Raka" &&
         formState.email === "guru@example.com" &&
         formState.password === "password123"
       ) {
@@ -73,6 +76,16 @@ const LoginPage: React.FC = () => {
           <h3 className="mb-4 text-center">Login Guru</h3>
           <Form onSubmit={handleSubmit}>
             {error && <div className="text-danger mb-3">{error}</div>}
+            <Form.Group className="mb-3" controlId="formEmail">
+              <Form.Label>Nama</Form.Label>
+              <Form.Control
+                type="name"
+                placeholder="Masukkan nama"
+                name="name"
+                value={formState.name}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control

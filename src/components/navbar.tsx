@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
+import { BsFillPersonLinesFill } from "react-icons/bs";
 
 const NavbarComponent = () => {
   const [showNavbar, setShowNavbar] = useState(true);
   const [expanded, setExpanded] = useState(false);
   let lastScrollY = 0;
 
+  const [activeLink, setActiveLink] = useState("");
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
@@ -26,7 +28,9 @@ const NavbarComponent = () => {
       fixed="top"
       expanded={expanded}
       onToggle={setExpanded}
-      className={`navbar-transition ${showNavbar ? "" : "navbar-hidden"} bg-light`}
+      className={`navbar-transition ${
+        showNavbar ? "" : "navbar-hidden"
+      } bg-light`}
     >
       <Container fluid>
         <Navbar.Brand href="#">
@@ -42,7 +46,14 @@ const NavbarComponent = () => {
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link href="#kontak">Kontak</Nav.Link>
+            <Nav.Link
+              href="#kontak"
+              onClick={() => setActiveLink}
+              className={activeLink === "kontak" ? "nav-kontak" : ""}
+            >
+              <BsFillPersonLinesFill className="me-2" />
+              Kontak
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

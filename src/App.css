@@ -20,11 +20,11 @@
   padding-left: 0;
   padding-right: 0;
   height: 70px;
-  width: 100%; /* Membuat navbar selebar viewport */
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999; /* Pastikan navbar di atas konten lainnya */
+  z-index: 999;
 }
 
 .navbar-logo {
@@ -38,6 +38,14 @@
 
 .navbar-hidden {
   transform: translateY(-100%);
+}
+
+/* navbar bagian kontak agar ada background */
+.nav-kontak {
+  background-color: #000000; /* warna background yang lu mau */
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: background-color 0.3s ease;
 }
 
 /* loginPage */
