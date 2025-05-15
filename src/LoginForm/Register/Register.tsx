@@ -3,8 +3,7 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
-// Tipe data untuk form state
-interface LoginFormState {
+interface RegisterFormState {
   name: string;
   email: string;
   password: string;
@@ -12,27 +11,26 @@ interface LoginFormState {
   rememberMe: boolean;
 }
 
-const LoginPage: React.FC = () => {
-  const [formState, setFormState] = useState<LoginFormState>({
+const RegisterPage: React.FC = () => {
+  const [formState, setFormState] = useState<RegisterFormState>({
     name: "",
     email: "",
     password: "",
     tahunPelajaran: "2024/2025",
     rememberMe: false,
   });
+
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
-
-    setFormState((prevState) => ({
-      ...prevState,
+    setFormState((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  const [Loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +38,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("http://localhost:5000/register", {
         name: formState.name,
         email: formState.email,
         password: formState.password,
@@ -48,12 +46,11 @@ const LoginPage: React.FC = () => {
         rememberMe: formState.rememberMe,
       });
 
-      // Simpan token ke localStorage (misal backend balikin token di response.data.token)
-      localStorage.setItem("token", response.data.token);
-
-      navigate("/landing");
-    } catch (error: any) {
-      setError(error.response?.data?.error || "Email atau password salah.");
+      // Bisa kamu arahkan ke login atau halaman lain
+      navigate("/login");
+    } catch (err: any) {
+      // Tangani error dari backend, misal response error message
+      setError(err.response?.data?.message || "Register gagal, coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -71,25 +68,27 @@ const LoginPage: React.FC = () => {
         <Col xs={12} md={6} className="p-0">
           <img
             src="/src/assets/login-form.png"
-            alt="Login Visual"
+            alt="Register Visual"
             className="img-fluid h-100 w-100 object-fit-cover"
           />
         </Col>
 
         <Col xs={12} md={6} className="bg-white p-4">
-          <h3 className="mb-4 text-center">Login Guru</h3>
+          <h3 className="mb-4 text-center">Register Guru</h3>
           <Form onSubmit={handleSubmit}>
             {error && <div className="text-danger mb-3">{error}</div>}
-            <Form.Group className="mb-3" controlId="formEmail">
+
+            <Form.Group className="mb-3" controlId="formName">
               <Form.Label>Nama</Form.Label>
               <Form.Control
-                type="name"
+                type="text"
                 placeholder="Masukkan nama"
                 name="name"
                 value={formState.name}
                 onChange={handleInputChange}
               />
             </Form.Group>
+
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -127,7 +126,7 @@ const LoginPage: React.FC = () => {
             <Form.Group className="mb-3" controlId="formCheckbox">
               <Form.Check
                 type="checkbox"
-                label="Simpan login"
+                label="Ingat saya"
                 name="rememberMe"
                 checked={formState.rememberMe}
                 onChange={handleInputChange}
@@ -138,9 +137,9 @@ const LoginPage: React.FC = () => {
               type="submit"
               variant="primary"
               className="w-100 mb-2"
-              disabled={Loading}
+              disabled={loading}
             >
-              {Loading ? (
+              {loading ? (
                 <>
                   <span
                     className="spinner-border spinner-border-sm me-2"
@@ -150,16 +149,13 @@ const LoginPage: React.FC = () => {
                   Loading...
                 </>
               ) : (
-                "Login"
+                "Register"
               )}
             </Button>
 
             <div className="d-flex justify-content-between">
-              <Link
-                to="/Register"
-                className="text-primary text-decoration-none justify-content-start"
-              >
-                Register
+              <Link to="/login" className="text-primary text-decoration-none">
+                Login
               </Link>
               <a href="#" className="text-muted text-decoration-none">
                 Lupa password?
@@ -172,4 +168,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
