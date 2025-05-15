@@ -1,44 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Container } from "react-bootstrap";
+import { Navbar, Container, Nav } from "react-bootstrap";
 
 const NavbarComponent = () => {
   const [showNavbar, setShowNavbar] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   let lastScrollY = 0;
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        setShowNavbar(false); // Jika scroll ke bawah, sembunyikan navbar
+        setShowNavbar(false); // Scroll ke bawah, sembunyikan
       } else {
-        setShowNavbar(true); // Jika scroll ke atas, tampilkan navbar
+        setShowNavbar(true); // Scroll ke atas, tampilkan
       }
-      lastScrollY = window.scrollY > 0 ? window.scrollY : 0; // Menyimpan posisi scroll terakhir
+      lastScrollY = window.scrollY > 0 ? window.scrollY : 0;
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <Navbar
       expand="lg"
       fixed="top"
-      className={` navbar-transition ${showNavbar ? "" : "navbar-hidden"}`}
+      expanded={expanded}
+      onToggle={setExpanded}
+      className={`navbar-transition ${showNavbar ? "" : "navbar-hidden"} bg-light`}
     >
       <Container fluid>
-        <Navbar.Brand>
+        <Navbar.Brand href="#">
           <img
             src="/src/assets/logo-ghamcak.png"
             alt="Logo"
-            width="160"
-            height="200"
-            className="navbar-logo"
+            className="img-fluid"
+            style={{ maxWidth: "100px", height: "auto" }}
           />
-          <span className="text-danger">E</span> -Rapor
+          <span className="text-danger ms-2">E</span> -Rapor
         </Navbar.Brand>
+
+        <Navbar.Toggle aria-controls="navbar-nav" />
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link href="#kontak">Kontak</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );

@@ -1,24 +1,37 @@
 import React from "react";
 import "./App.css";
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
 // import components
 import NavbarComponent from "./components/navbar";
 import LoginPage from "./LoginForm/LoginPage";
 import LandingPage from "./pages/Beranda";
 
-function App() {
+// Pembungkus supaya bisa pakai useLocation
+function AppWrapper() {
   return (
     <Router>
-      <NavbarComponent />
+      <App />
+    </Router>
+  );
+}
+
+function App() {
+  const location = useLocation();
+  
+  const isLandingPage = location.pathname === "/landing";
+
+  return (
+    <>
+      {!isLandingPage && <NavbarComponent />}
+
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/" element={<LoginPage />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 
-export default App;
+export default AppWrapper;
