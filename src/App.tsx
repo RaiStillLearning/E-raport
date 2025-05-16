@@ -4,24 +4,109 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   useLocation,
 } from "react-router-dom";
 
-// Import UserContext dan UserProvider yang kamu buat
+//navbar
+import NavbarComponent from "./components/navbar";
+import Sidebar from "./components/Sidebar";
+
+// Import UserContext dan UserProvider
 import { UserContext, UserProvider } from "./context/UserContext";
 
-// Import components
-import NavbarComponent from "./components/navbar";
-import Sidebar from "./components/SideBar";
+// Layouts
+import GuruLayout from "./layouts/GuruLayout";
+
+// Pages
+import BerandaGuru from "./pages/guru/Beranda";
+import LandingPage from "./pages/guest/Beranda";
 import LoginPage from "./LoginForm/LoginPage";
 import RegisterPage from "./LoginForm/Register/Register";
-import LandingPage from "./pages/Beranda";
 
-const sidebarWidth = 220;
-const toggleWidth = 40;
+function App() {
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(true);
 
-function AppWrapper() {
-  // Bungkus App dengan UserProvider dan Router supaya context dan routing berjalan
+  const { userRole } = useContext(UserContext);
+
+  // Halaman yang punya sidebar, contoh
+  const isSidebarPage = [
+    "/guru/beranda",
+    "/tambah-nilai",
+    "/pengguna",
+  ].includes(location.pathname);
+
+  // Fungsi redirect otomatis dari '/' sesuai role
+  const RedirectBasedOnRole = () => {
+    if (!userRole || userRole === "guest") {
+      return <Navigate to="/login" replace />;
+    }
+    if (userRole === "guru") {
+      return <Navigate to="/guru/beranda" replace />;
+    }
+    // Bisa tambah role lain, misal admin
+    // if (userRole === "admin") return <Navigate to="/admin/beranda" replace />;
+    return <Navigate to="/login" replace />;
+  };
+
+  return (
+    <div className="flex">
+      {isSidebarPage && userRole !== "guest" && <Sidebar />}
+
+      <div
+        className="flex-1"
+        style={{
+          marginLeft:
+            isSidebarPage && userRole !== "guest"
+              ? isOpen
+                ? 220 + 40
+                : 40
+              : 0,
+          transition: "margin-left 0.3s ease-in-out",
+        }}
+      >
+        {/* Navbar hanya tampil kalau bukan halaman sidebar */}
+        {!isSidebarPage && <NavbarComponent />}
+
+        <Routes>
+          {/* Auth */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Guest route */}
+          <Route path="/landing" element={<LandingPage />} />
+
+          {/* Guru route dengan layout */}
+          <Route
+            path="/guru/*"
+            element={
+              userRole === "guru" ? (
+                <GuruLayout>
+                  <Routes>
+                    <Route path="beranda" element={<BerandaGuru />} />
+                    {/* Tambah halaman guru lain */}
+                  </Routes>
+                </GuruLayout>
+              ) : (
+                // Kalau bukan guru, redirect ke login
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Default route */}
+          <Route path="/" element={<RedirectBasedOnRole />} />
+
+          {/* 404 fallback */}
+          <Route path="*" element={<div>404 - Halaman tidak ditemukan</div>} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+export default function AppWrapper() {
   return (
     <UserProvider>
       <Router>
@@ -30,48 +115,3 @@ function AppWrapper() {
     </UserProvider>
   );
 }
-
-function App() {
-  const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
-
-  // Ambil userRole dari context, bukan localStorage langsung
-  const { userRole } = useContext(UserContext);
-
-  const isLandingRelated = ["/landing", "/tambah-nilai", "/pengguna"].includes(
-    location.pathname
-  );
-
-  return (
-    <div className="flex">
-      {isLandingRelated && userRole !== "guest" && (
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-      )}
-
-      <div
-        className="flex-1"
-        style={{
-          marginLeft:
-            isLandingRelated && userRole !== "guest"
-              ? isOpen
-                ? sidebarWidth + toggleWidth
-                : toggleWidth
-              : 0,
-          transition: "margin-left 0.3s ease-in-out",
-        }}
-      >
-        {!isLandingRelated && <NavbarComponent />}
-
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/landing" element={<LandingPage />} />
-          {/* tambah rute lainnya di sini */}
-          <Route path="/" element={<LoginPage />} />
-        </Routes>
-      </div>
-    </div>
-  );
-}
-
-export default AppWrapper;

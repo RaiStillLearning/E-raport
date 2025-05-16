@@ -33,7 +33,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (response.data && response.data.role) {
         setUserRole(response.data.role);
-        localStorage.setItem("userRole", response.data.role);
+        localStorage.setItem("role", response.data.role);
       } else {
         setUserRole("guest");
       }

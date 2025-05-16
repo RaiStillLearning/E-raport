@@ -50,12 +50,17 @@ const LoginPage: React.FC = () => {
         rememberMe: formState.rememberMe,
       });
 
-      const userRole = response.data.user.role; // <-- Ambil role dari backend
+      const userRole = response.data.user.role;
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userRole", userRole);
       setUserRole(userRole);
 
-      navigate("/landing");
+      // Redirect sesuai role
+      if (userRole === "guru") {
+        navigate("/guru/beranda");
+      } else {
+        navigate("/landing");
+      }
     } catch (error: any) {
       setError(error.response?.data?.error || "Email atau password salah.");
     } finally {

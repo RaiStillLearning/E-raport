@@ -73,7 +73,7 @@ const Sidebar = () => {
           {isOpen && (
             <>
               <div className="text-center mb-4">
-                <img src={Logo} alt="Logo" style={{ height: "60px" }} />
+                <img src={Logo} alt="Logo" style={{ height: "140px" }} />
                 <div className="mt-2">Role Kamu: {userRole}</div>
               </div>
 
