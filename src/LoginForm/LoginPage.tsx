@@ -20,12 +20,12 @@ const LoginPage: React.FC = () => {
     tahunPelajaran: "2024/2025",
     rememberMe: false,
   });
-  const [error, setError] = useState<string>("");
-  const [Loading, setLoading] = useState(false);
 
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Ambil setUserRole dari UserContext
+  // Ambil setUserRole dari UserContext dengan benar (di dalam komponen)
   const { setUserRole } = useContext(UserContext);
 
   const handleInputChange = (e: React.ChangeEvent<any>) => {
@@ -50,11 +50,10 @@ const LoginPage: React.FC = () => {
         rememberMe: formState.rememberMe,
       });
 
-      // Simpan token di localStorage
+      const userRole = response.data.user.role; // <-- Ambil role dari backend
       localStorage.setItem("token", response.data.token);
-
-      // Simpan role user di context
-      setUserRole(response.data.user.role);
+      localStorage.setItem("userRole", userRole);
+      setUserRole(userRole);
 
       navigate("/landing");
     } catch (error: any) {
@@ -63,6 +62,7 @@ const LoginPage: React.FC = () => {
       setLoading(false);
     }
   };
+
   return (
     <Container
       fluid
@@ -84,16 +84,18 @@ const LoginPage: React.FC = () => {
           <h3 className="mb-4 text-center">Login E-Rapor</h3>
           <Form onSubmit={handleSubmit}>
             {error && <div className="text-danger mb-3">{error}</div>}
-            <Form.Group className="mb-3" controlId="formEmail">
+
+            <Form.Group className="mb-3" controlId="formName">
               <Form.Label>Nama</Form.Label>
               <Form.Control
-                type="name"
+                type="text"
                 placeholder="Masukkan nama"
                 name="name"
                 value={formState.name}
                 onChange={handleInputChange}
               />
             </Form.Group>
+
             <Form.Group className="mb-3" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -142,9 +144,9 @@ const LoginPage: React.FC = () => {
               type="submit"
               variant="primary"
               className="w-100 mb-2"
-              disabled={Loading}
+              disabled={loading}
             >
-              {Loading ? (
+              {loading ? (
                 <>
                   <span
                     className="spinner-border spinner-border-sm me-2"
@@ -161,7 +163,7 @@ const LoginPage: React.FC = () => {
             <div className="d-flex justify-content-between">
               <Link
                 to="/Register"
-                className="text-primary text-decoration-none justify-content-start"
+                className="text-primary text-decoration-none"
               >
                 Register
               </Link>

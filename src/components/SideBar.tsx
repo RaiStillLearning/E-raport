@@ -6,16 +6,30 @@ import Logo from "../assets/logo-ghamcak.png";
 
 const Sidebar = () => {
   const { userRole } = useContext(UserContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(() => {
+    const saved = localStorage.getItem("sidebarIsOpen");
+    if (saved !== null) return JSON.parse(saved);
+    return window.innerWidth >= 768; // buka sidebar kalau desktop
+  });
   const [isMobile, setIsMobile] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
 
+  if (!userRole) {
+    return null; // atau loading spinner
+  }
+
   useEffect(() => {
     const mobile = window.innerWidth < 768;
     setIsMobile(mobile);
-    setIsOpen(!mobile);
   }, []);
+
+  const toggleSidebar = () => {
+    setIsOpen((prev) => {
+      localStorage.setItem("sidebarIsOpen", JSON.stringify(!prev));
+      return !prev;
+    });
+  };
 
   const menuItems = [
     { name: "Beranda", path: "/landing" },
@@ -119,7 +133,7 @@ const Sidebar = () => {
         >
           <Button
             variant="dark"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggleSidebar}
             style={{ padding: 0, width: "30px", height: "30px" }}
             aria-label="Toggle Sidebar"
           >
