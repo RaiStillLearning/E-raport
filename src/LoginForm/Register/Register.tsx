@@ -74,7 +74,7 @@ const RegisterPage: React.FC = () => {
         </Col>
 
         <Col xs={12} md={6} className="bg-white p-4">
-          <h3 className="mb-4 text-center">Register Guru</h3>
+          <h3 className="mb-4 text-center">Register E-Rapor</h3>
           <Form onSubmit={handleSubmit}>
             {error && <div className="text-danger mb-3">{error}</div>}
 

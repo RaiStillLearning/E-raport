@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
-// Tipe data untuk form state
 interface LoginFormState {
   name: string;
   email: string;
@@ -21,18 +21,20 @@ const LoginPage: React.FC = () => {
     rememberMe: false,
   });
   const [error, setError] = useState<string>("");
+  const [Loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
+  // Ambil setUserRole dari UserContext
+  const { setUserRole } = useContext(UserContext);
 
   const handleInputChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type, checked } = e.target;
-
     setFormState((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  const [Loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +50,11 @@ const LoginPage: React.FC = () => {
         rememberMe: formState.rememberMe,
       });
 
-      // Simpan token ke localStorage (misal backend balikin token di response.data.token)
+      // Simpan token di localStorage
       localStorage.setItem("token", response.data.token);
+
+      // Simpan role user di context
+      setUserRole(response.data.user.role);
 
       navigate("/landing");
     } catch (error: any) {
@@ -58,7 +63,6 @@ const LoginPage: React.FC = () => {
       setLoading(false);
     }
   };
-
   return (
     <Container
       fluid
@@ -77,7 +81,7 @@ const LoginPage: React.FC = () => {
         </Col>
 
         <Col xs={12} md={6} className="bg-white p-4">
-          <h3 className="mb-4 text-center">Login Guru</h3>
+          <h3 className="mb-4 text-center">Login E-Rapor</h3>
           <Form onSubmit={handleSubmit}>
             {error && <div className="text-danger mb-3">{error}</div>}
             <Form.Group className="mb-3" controlId="formEmail">
