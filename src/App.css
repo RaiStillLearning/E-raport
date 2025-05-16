@@ -49,3 +49,11 @@
 }
 
 /* loginPage */
+
+/* 
+/*beranda tabel responsif */
+@media (max-width: 768px) {
+  .table-responsive {
+    display: none;
+  }
+}
