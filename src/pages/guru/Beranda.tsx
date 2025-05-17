@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Table, Button, Form, Card, Row, Col } from "react-bootstrap";
+import { Table, Button, Form, Card } from "react-bootstrap";
 
 interface NilaiInput {
   no: number;

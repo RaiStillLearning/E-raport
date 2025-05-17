@@ -9,15 +9,14 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(() => {
     const saved = localStorage.getItem("sidebarIsOpen");
     if (saved !== null) return JSON.parse(saved);
-    return window.innerWidth >= 768; // buka sidebar kalau desktop
+    return window.innerWidth >= 768;
   });
   const [isMobile, setIsMobile] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownRefrensiOpen, setDropdownRefrensiOpen] = useState(false);
   const location = useLocation();
 
-  if (!userRole) {
-    return null; // atau loading spinner
-  }
+  if (!userRole) return null;
 
   useEffect(() => {
     const mobile = window.innerWidth < 768;
@@ -31,19 +30,18 @@ const Sidebar = () => {
     });
   };
 
-  const menuItems = [
-    { name: "Beranda", path: "/landing" },
-    ...(userRole === "guru" || userRole === "admin"
-      ? [{ name: "Tambah Nilai", path: "/tambah-nilai" }]
-      : []),
-    ...(userRole === "admin"
-      ? [{ name: "Kelola Pengguna", path: "/pengguna" }]
-      : []),
-  ];
+  const menuItems = [{ name: "Beranda", path: "/guru/beranda" }];
 
   const dropdownItems = [
     { name: "Profil Saya", path: "/profil" },
     { name: "Pengaturan", path: "/pengaturan" },
+  ];
+
+  // Revisi path sesuai route yang kamu punya di GuruRoutes (camelCase tanpa strip)
+  const dropdownRefrensiItems = [
+    { name: "Peserta Didik", path: "/guru/pesertadidik" },
+    { name: "Tujuan Pembelajaran", path: "/guru/tujuanPembelajaran" },
+    { name: "Lingkup Materi", path: "/guru/lingkupMateri" },
   ];
 
   const sidebarWidth = 220;
@@ -61,7 +59,6 @@ const Sidebar = () => {
           zIndex: 1040,
         }}
       >
-        {/* Sidebar */}
         <div
           className="bg-dark text-white p-3"
           style={{
@@ -92,6 +89,33 @@ const Sidebar = () => {
                   </Nav.Link>
                 ))}
 
+                {/* Dropdown Refrensi */}
+                <Button
+                  variant="link"
+                  className="text-white text-start"
+                  onClick={() => setDropdownRefrensiOpen(!dropdownRefrensiOpen)}
+                  aria-controls="refrensi-collapse"
+                  aria-expanded={dropdownRefrensiOpen}
+                >
+                  📚 Refrensi ▼
+                </Button>
+                <Collapse in={dropdownRefrensiOpen}>
+                  <div id="refrensi-collapse">
+                    {dropdownRefrensiItems.map((item) => (
+                      <Nav.Link
+                        as={Link}
+                        to={item.path}
+                        key={item.path}
+                        onClick={() => isMobile && setIsOpen(false)}
+                        className="text-white ms-3 mb-2"
+                      >
+                        {item.name}
+                      </Nav.Link>
+                    ))}
+                  </div>
+                </Collapse>
+
+                {/* Dropdown Pengguna */}
                 <Button
                   variant="link"
                   className="text-white text-start"
