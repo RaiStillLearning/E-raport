@@ -22,15 +22,14 @@ import LandingPage from "./pages/guest/Beranda";
 import LoginPage from "./LoginForm/LoginPage";
 import RegisterPage from "./LoginForm/Register/Register";
 import PesertaDidik from "./pages/guru/PesertaDidik";
+import TujuanPembelajaran from "./pages/guru/TujuanPembelajaran";
 
 function App() {
   const location = useLocation();
   const { userRole } = useContext(UserContext);
-  const [isOpen, setIsOpen] = useState(true);
 
-  const isSidebarPage = ["/guru/beranda", "/guru/pesertadidik"].includes(
-    location.pathname
-  );
+  // Ini buat Navbar, muncul kalau bukan halaman guru (atau halaman yg pake sidebar)
+  const isGuruRoute = location.pathname.startsWith("/guru");
 
   const RedirectBasedOnRole = () => {
     if (!userRole || userRole === "guest") return <Navigate to="/login" />;
@@ -39,21 +38,11 @@ function App() {
   };
 
   return (
-    <div className="flex">
-      {/* Sidebar hanya jika perlu */}
-      {isSidebarPage && userRole === "guru" && <Sidebar />}
+    <div className="flex flex-col min-h-screen">
+      {/* Navbar untuk halaman non-guru */}
+      {!isGuruRoute && <NavbarComponent />}
 
-      <div
-        className="flex-1"
-        style={{
-          marginLeft:
-            isSidebarPage && userRole === "guru" ? (isOpen ? 220 + 40 : 40) : 0,
-          transition: "margin-left 0.3s ease-in-out",
-        }}
-      >
-        {/* Navbar untuk halaman non-sidebar */}
-        {!isSidebarPage && <NavbarComponent />}
-
+      <div className="flex-1">
         <Routes>
           {/* Auth routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -67,6 +56,10 @@ function App() {
             <Route path="/guru" element={<GuruLayout />}>
               <Route path="beranda" element={<BerandaGuru />} />
               <Route path="pesertadidik" element={<PesertaDidik />} />
+              <Route
+                path="tujuanPembelajaran"
+                element={<TujuanPembelajaran />}
+              />
             </Route>
           )}
 
