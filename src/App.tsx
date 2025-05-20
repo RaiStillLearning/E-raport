@@ -23,6 +23,10 @@ import LoginPage from "./LoginForm/LoginPage";
 import RegisterPage from "./LoginForm/Register/Register";
 import PesertaDidik from "./pages/guru/PesertaDidik";
 import TujuanPembelajaran from "./pages/guru/TujuanPembelajaran";
+<<<<<<< HEAD
+=======
+import LingkupMateri from "./pages/guru/LingkupMateri";
+>>>>>>> 42060f1e760926b4824314108397b017023c4628
 
 function App() {
   const location = useLocation();
@@ -60,6 +64,10 @@ function App() {
                 path="tujuanPembelajaran"
                 element={<TujuanPembelajaran />}
               />
+<<<<<<< HEAD
+=======
+              <Route path="lingkup-materi" element={<LingkupMateri/>}/>
+>>>>>>> 42060f1e760926b4824314108397b017023c4628
             </Route>
           )}
 
