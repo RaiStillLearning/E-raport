@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* navbar section */
+@media (max-width: 768px) {
+  .navbar-logo {
+    width: 120px;
+    height: auto;
+  }
+}
+
+.navbar-color {
+  background-color: #fff;
+}
+
+.navbar {
+  padding-left: 0;
+  padding-right: 0;
+  height: 70px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.navbar-logo {
+  width: auto;
+  height: 200px;
+}
+
+.navbar-transition {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-hidden {
+  transform: translateY(-100%);
+}
+
+/* navbar bagian kontak agar ada background */
+.nav-kontak {
+  background-color: #000000; /* warna background yang lu mau */
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: background-color 0.3s ease;
+}
+
+/* loginPage */
+
+/* 
+/*beranda tabel responsif */
+@media (max-width: 768px) {
+  .table-responsive {
+    display: none;
+  }
+}
+
+/* tabel tujuan pembelajaran */
+.table-responsive {
+  overflow-x: auto;
+}
